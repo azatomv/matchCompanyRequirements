@@ -1,4 +1,4 @@
-const input = [
+const companies = [
     {
       // requires an apartment or house, and property insurance
       companyID:'a',
@@ -232,6 +232,6 @@ function sortCompanies(input){
     }
     return {result, result2};
 }
-const input2 = [];
-const output = sortCompanies(input);
+const companies2 = [];
+const output = sortCompanies(companies);
 console.info(output);
