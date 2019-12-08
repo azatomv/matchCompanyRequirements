@@ -38,7 +38,7 @@ const input = [
       bike: false,
      },
      {
-      // SSN && work permit
+      // requires SSN and work permit
       companyID:'c',
       apartment: false,
       insurance: false,
@@ -131,7 +131,7 @@ const input = [
       paypal: false,
       workPermit: false,
       bike: false
-   },
+     },
      {
       // requires a storage place or a garage
       companyID: 'h',
@@ -150,26 +150,26 @@ const input = [
       paypal: false,
       workPermit: false,
       bike: false
-        },
-        {
-         // doesn't require anything, you can come and start working immediately
-         companyID: 'j',  
-         apartment: false,
-         insurance: false,
-         driverLicense: false,
-         carInsurance: false,
-         smallCar: false, // 2D/3D car
-         bigCar: false, // 4D/5D car
-         scooter: false,
-         motorcycleInsurance: false,
-         massageCertificate: false,
-         liabilityInsurance: false,
-         storagePlace: false, // garage
-         ssn: false,
-         paypal: false,
-         workPermit: false,
-         bike: false
-        },
+     },
+     {
+      // doesn't require anything, you can come and start working immediately
+      companyID: 'j',  
+      apartment: false,
+      insurance: false,
+      driverLicense: false,
+      carInsurance: false,
+      smallCar: false, // 2D/3D car
+      bigCar: false, // 4D/5D car
+      scooter: false,
+      motorcycleInsurance: false,
+      massageCertificate: false,
+      liabilityInsurance: false,
+      storagePlace: false, // garage
+      ssn: false,
+      paypal: false,
+      workPermit: false,
+      bike: false
+     },
      {
       // requires a PayPal account
       companyID: 'k',
@@ -188,35 +188,42 @@ const input = [
       paypal: true,
       workPermit: false,
       bike: false,
-    }, 
+     }, 
 ]
 
-function returnMatching(input){
+function sortCompanies(input){
    let result = [], result2 = [];
     if(input.length === 0){
-       return 'input should not be empty';
+       return 'Input should not be empty';
     } else {
-        for(const inputItem in input){ 
-            const keys = Object.keys(input[inputItem]);
-            const entries = Object.entries(input[inputItem]);
-            const companyID = keys.shift();
-            if(keys.every(k => input[inputItem][k] === false)){ 
-                result.push(input[inputItem][companyID]);
-            } else {
-                for (let [k, value] of entries){ 
-                    if(k === 'bike' && value === true){
-                    let nKeys = keys.filter(k => k !== 'bike');
-                        nKeys = nKeys.filter(k => input[inputItem][k] === true);
-                    if(nKeys.length === 1 && nKeys[0] === 'driverLicense'){
-                        result.push(input[inputItem][companyID]);
-                    }
-                    } 
+        for(let inputItem in input){
+            let keys = Object.keys(input[inputItem]), values = Object.values(input[inputItem]);
+            keys.shift();
+            const companyID = values.shift();
+            if(values.filter(i => i === true).length === 0){
+                result.push(companyID);
+                continue;
+            }
+            for (let i=0; i < keys.length; i++){ 
+                if(keys[i] !== 'bike' && keys[i] !== 'driverLicense' && values[i] === true ){
+                    result2.push(companyID);
+                    i = keys.length;
                 }
-                result2.push(input[inputItem][companyID]);
+                if(keys[i] === 'bike' || keys[i] === 'driverLicense' && values[i] === true ){
+                    keys.splice(i, 1);
+                    values.splice(i, 1);
+                    const nValues = values.filter(i => i === true);
+                    if(nValues.length === 1){
+                        if(keys[values.indexOf(true)] === 'driverLicense'){
+                            result.push(companyID);
+                        }
+                    }
+                }
             }
         }
     }
-    return {result, result2}
+    return {result, result2};
 }
-const output = returnMatching(input);
+const input2 = [];
+const output = sortCompanies(input);
 console.info(output);
