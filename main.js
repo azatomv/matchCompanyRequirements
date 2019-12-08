@@ -3,7 +3,7 @@ const input = [
       // requires an apartment or house, and property insurance
       companyID:'a',
       apartment: true,
-      insurance: true,
+      propertyInsurance: true,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -22,7 +22,7 @@ const input = [
         //requires 5 door car or 4 door car, and a driver's license and car insurance
       companyID: 'b',
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: true,
       carInsurance: true,
       smallCar: false, // 2D/3D car
@@ -41,7 +41,7 @@ const input = [
       // requires SSN and work permit
       companyID:'c',
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -60,7 +60,7 @@ const input = [
       // requires an apartment or a flat or a house
       companyID :'d',
       apartment: true,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -70,35 +70,35 @@ const input = [
       massageCertificate: false,
       liabilityInsurance: false,
       storagePlace: false, // garage
-      ssn: true,
+      ssn: false,
       paypal: false,
-      workPermit: true,
+      workPermit: false,
       bike: false,
       },
      {
       // requires a DRIVER LICENSE and a 2 door car or a 3 door car or a 4 door car or a 5 door car
       companyID :'e',
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: true,
       carInsurance: false,
-      smallCar: false, // 2D/3D car // true
-      bigCar: true, // 4D/5D car // false
-      scooter: true,
+      smallCar: false, // 2D/3D car
+      bigCar: true, // 4D/5D car
+      scooter: false,
       motorcycleInsurance: false,
       massageCertificate: false,
       liabilityInsurance: false,
       storagePlace: false, // garage
-      ssn: true,
+      ssn: false,
       paypal: false,
-      workPermit: true,
+      workPermit: false,
       bike: false,
      },
      {
-      //   requires a scooter or a BIKE, or a motorcycle and a DRIVER LICENSE and motorcycle insurance
+      //   requires a scooter or a bike, or a motorcycle and a driver's license and motorcycle insurance
       companyID: 'f', 
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: true,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -108,7 +108,7 @@ const input = [
       massageCertificate: false,
       liabilityInsurance: false,
       storagePlace: false, // garage
-      ssn: true,
+      ssn: false,
       paypal: false,
       workPermit: false,
       bike: true
@@ -117,7 +117,7 @@ const input = [
       // requires a massage qualification certificate and a liability insurance
       companyID: 'g',  
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -136,7 +136,7 @@ const input = [
       // requires a storage place or a garage
       companyID: 'h',
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -145,7 +145,7 @@ const input = [
       motorcycleInsurance: false,
       massageCertificate: false,
       liabilityInsurance: false,
-      storagePlace: true, // garage
+      storagePlace: true, // || garage
       ssn: false,
       paypal: false,
       workPermit: false,
@@ -155,7 +155,7 @@ const input = [
       // doesn't require anything, you can come and start working immediately
       companyID: 'j',  
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -174,7 +174,7 @@ const input = [
       // requires a PayPal account
       companyID: 'k',
       apartment: false,
-      insurance: false,
+      propertyInsurance: false,
       driverLicense: false,
       carInsurance: false,
       smallCar: false, // 2D/3D car
@@ -207,16 +207,24 @@ function sortCompanies(input){
             for (let i=0; i < keys.length; i++){ 
                 if(keys[i] !== 'bike' && keys[i] !== 'driverLicense' && values[i] === true ){
                     result2.push(companyID);
-                    i = keys.length;
+                    break;
                 }
                 if(keys[i] === 'bike' || keys[i] === 'driverLicense' && values[i] === true ){
                     keys.splice(i, 1);
                     values.splice(i, 1);
                     const nValues = values.filter(i => i === true);
                     if(nValues.length === 1){
-                        if(keys[values.indexOf(true)] === 'driverLicense'){
+                        const index = values.indexOf(true);
+                        if(keys[index] === 'driverLicense' || keys[index] === 'bike'){
                             result.push(companyID);
+                            break;
+                        } else {
+                            result2.push(companyID);
+                            break;
                         }
+                    } else {
+                        result2.push(companyID);
+                        break;
                     }
                 }
             }
